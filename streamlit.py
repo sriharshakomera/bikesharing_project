@@ -1,12 +1,23 @@
+
+import sys
+
+if sys.version_info >= (3, 13):
+    import types
+    sys.modules['imghdr'] = types.ModuleType('imghdr')
+
 import streamlit as st
 import os
-import sys
 import pandas as pd
 import pickle
 from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
 from src.logger import logging
 import base64
+
+
+# compatibility shim for Python 3.13+
+
+
 
 #st.set_page_config(layout="wide")
 
