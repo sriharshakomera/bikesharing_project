@@ -36,6 +36,7 @@ class ModelTrainer:
                 test_array[:,-1]
             )
 
+
             models = {
                 "Random Forest": RandomForestRegressor(),
                 "Decision Tree": DecisionTreeRegressor(),
@@ -107,6 +108,7 @@ class ModelTrainer:
             predicted=best_model.predict(X_test)
             r2_square = r2_score(y_test, predicted)
 
+            
             logging.info(f"Best found model {best_model} with R2_score {r2_square} on Train and Test Dataset")
             return r2_square
         

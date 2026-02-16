@@ -7,7 +7,7 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder,StandardScaler
+from sklearn.preprocessing import OrdinalEncoder,StandardScaler
 
 from src.exception import CustomException
 from src.logger import logging
@@ -26,9 +26,12 @@ class DataTransformation:
 
     def get_data_transformer_object(self):
         try:
-            numerical_columns=['temp','atemp','hum','windspeed']
-            categorical_columns=['yr','hr','holiday','workingday','season','weathersit','mnth','weekday']
+            logging.info('Data Transformation initiated')
+            numerical_columns=['season',  'mnth', 'hr', 'holiday', 'weekday', 'workingday','weathersit', 
+            'temp', 'atemp', 'hum', 'windspeed'] #'yr'
+            categorical_columns=[]
 
+            logging.info('Pipeline Initiated')
             num_pipeline =Pipeline(
                 steps=[
                     ("imputer",SimpleImputer(strategy='median')),
@@ -40,8 +43,8 @@ class DataTransformation:
             cat_pipeline=Pipeline(
                 steps=[
                     ("imputer",SimpleImputer(strategy="most_frequent")),
-                    ("OneHotEncoder",OneHotEncoder(sparse=False)),
-                    ("scaler",StandardScaler(with_mean=False))
+                    ('ordinalencoder',OrdinalEncoder(categories=[])),
+                    ("scaler",StandardScaler()),
                 ]
 
             )
@@ -60,6 +63,7 @@ class DataTransformation:
             return preprocessor
 
         except Exception as e:
+            logging.info("Error in Data Transformation")
             raise CustomException(e,sys)
     
     def initiate_data_transformation(self,train_path,test_path):
@@ -74,15 +78,19 @@ class DataTransformation:
             preprocessing_obj=self.get_data_transformer_object()
 
             target_column_name='cnt'
+            drop_columns = [target_column_name,'dteday','yr']
            # numerical_columns=['temp','atemp','hum','windspeed']
 
-            input_feature_train_df = train_df.drop(columns=[target_column_name,'dteday'],axis=1)
+            input_feature_train_df = train_df.drop(columns=drop_columns,axis=1)
             target_feature_train_df = train_df[target_column_name]
 
-            logging.info( print("train_df columns: ",input_feature_train_df.columns))
+            logging.info( print("train_df columns: ",train_df.columns))
+            logging.info( print("test_df columns: ",test_df.columns))
 
-            input_feature_test_df = test_df.drop(columns=[target_column_name,'dteday'],axis=1)
+            input_feature_test_df = test_df.drop(columns=drop_columns,axis=1)
             target_feature_test_df = test_df[target_column_name]
+
+            logging.info( print("input_feature_test_df columns: ",input_feature_test_df.columns))
 
             logging.info(f"Applying preprocessing object on training and testing dataframe")
 
@@ -108,8 +116,7 @@ class DataTransformation:
                 train_arr,
                 test_arr,
                 self.data_transformation_config.preprocessor_obj_file_path,
-            )
-        
+            )       
 
 
         except Exception as e:
