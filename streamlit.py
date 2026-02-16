@@ -86,8 +86,6 @@ st.subheader(':green[Enter accurate information to predict bike sharing demand]'
 st.subheader(':red[Enter weather specific attribute]')
 
 
-st.subheader(':red[Enter weather specific attribute]') 
-
 #Attributes regarding weather
 col1, col2, col3, col4,col5= st.columns(5)  
 
