@@ -6,7 +6,6 @@ import pickle
 from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
 from src.logger import logging
-from PIL import Image
 import base64
 
 #st.set_page_config(layout="wide")
@@ -17,8 +16,14 @@ st.set_page_config(
     layout="wide"
 )
 
-# ---- FUNCTION TO SET BACKGROUND IMAGE ----
-def set_bg(image_file):
+# ---------------------------------------------
+# 2️⃣ FUNCTION TO SET BACKGROUND IMAGE WITH TRANSPARENCY
+# ---------------------------------------------
+def set_bg(image_file, overlay_opacity=0.75):
+    """
+    Sets a full-page background image with a semi-transparent overlay.
+    overlay_opacity: 0.0 (no overlay) to 1.0 (full white overlay)
+    """
     with open(image_file, "rb") as f:
         data = f.read()
     encoded = base64.b64encode(data).decode()
@@ -28,8 +33,8 @@ def set_bg(image_file):
         <style>
         .stApp {{
             background: linear-gradient(
-                        rgba(255, 255, 255, 0.75),
-                        rgba(255, 255, 255, 0.75)
+                        rgba(255, 255, 255, {overlay_opacity}),
+                        rgba(255, 255, 255, {overlay_opacity})
                         ),
                         url("data:image/png;base64,{encoded}");
             background-size: cover;
@@ -41,10 +46,14 @@ def set_bg(image_file):
         unsafe_allow_html=True
     )
 
-# ---- CALL BACKGROUND FUNCTION ----
-set_bg(os.path.join('src','bike-rental.png'))
+# ---------------------------------------------
+# 3️⃣ CALL BACKGROUND FUNCTION
+# ---------------------------------------------
+set_bg(os.path.join('src', 'bike-rental.png'), overlay_opacity=0.75)
 
-# ---- CUSTOM CSS FOR HEADER ----
+# ---------------------------------------------
+# 4️⃣ CUSTOM CSS FOR HEADER
+# ---------------------------------------------
 st.markdown("""
     <style>
     .top-banner {
@@ -62,15 +71,17 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ---- HEADER SECTION ----
+# ---------------------------------------------
+# 5️⃣ HEADER SECTION WITH LOGO + TEXT
+# ---------------------------------------------
 with st.container():
     st.markdown('<div class="top-banner">', unsafe_allow_html=True)
 
     col1, col2 = st.columns([1, 4])
 
     with col1:
-        # Streamlit can show image directly, no PIL
-        st.image(os.path.join('src','Blue-Yonder-Logo-Vector.svg-.png'), width=380)
+        # Show logo directly with Streamlit, no PIL needed
+        st.image(os.path.join('src', 'Blue-Yonder-Logo-Vector.svg-.png'), width=380)
 
     with col2:
         st.markdown(
@@ -80,10 +91,12 @@ with st.container():
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ---- PAGE CONTENT ----
+# ---------------------------------------------
+# 6️⃣ PAGE CONTENT
+# ---------------------------------------------
 st.title(':blue[Bike Sharing Demand Prediction]')
 st.subheader(':green[Enter accurate information to predict bike sharing demand]')
-st.subheader(':red[Enter weather specific attribute]')
+st.subheader(':red[Enter weather specific attributes]')
 
 
 #Attributes regarding weather
