@@ -7,8 +7,9 @@ from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
 from src.logger import logging
 from PIL import Image
+import base64
 
-
+#st.set_page_config(layout="wide")
 
 # ---- PAGE CONFIG ----
 st.set_page_config(
@@ -16,19 +17,33 @@ st.set_page_config(
     layout="wide"
 )
 
-st.markdown("""
-    <style>
-        /* Main app background */
-        .stApp {
-            background-color: #e6f2ff;
-        }
+# ---- FUNCTION TO SET BACKGROUND IMAGE ----
+def set_bg(image_file):
+    with open(image_file, "rb") as f:
+        data = f.read()
+    encoded = base64.b64encode(data).decode()
 
-        /* Optional: remove white block container look */
-        section[data-testid="stSidebar"] {
-            background-color: #d9ecff;
-        }
-    </style>
-""", unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background: linear-gradient(
+                        rgba(255, 255, 255, 0.75),
+                        rgba(255, 255, 255, 0.75)
+                        ),
+                        url("data:image/png;base64,{encoded}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+# ---- CALL FUNCTION ----
+set_bg(os.path.join('src','bike-rental.png'))
+
 
 
 # ---- CUSTOM CSS FOR HEADER ----
