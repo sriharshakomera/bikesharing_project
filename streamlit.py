@@ -41,16 +41,13 @@ def set_bg(image_file):
         unsafe_allow_html=True
     )
 
-# ---- CALL FUNCTION ----
+# ---- CALL BACKGROUND FUNCTION ----
 set_bg(os.path.join('src','bike-rental.png'))
-
-
 
 # ---- CUSTOM CSS FOR HEADER ----
 st.markdown("""
     <style>
     .top-banner {
-        background-color: #eef6ff;
         background: transparent;
         padding: 20px 40px;
         border-radius: 8px;
@@ -72,19 +69,21 @@ with st.container():
     col1, col2 = st.columns([1, 4])
 
     with col1:
-        logo = Image.open(os.path.join('src','Blue-Yonder-Logo-Vector.svg-.png') ) # <-- your logo file
-        st.image(logo, width=380)
+        # Streamlit can show image directly, no PIL
+        st.image(os.path.join('src','Blue-Yonder-Logo-Vector.svg-.png'), width=380)
 
     with col2:
         st.markdown(
-            '<div class="banner-text">Hiring Case Study </div>',
+            '<div class="banner-text">Hiring Case Study</div>',
             unsafe_allow_html=True
         )
 
     st.markdown('</div>', unsafe_allow_html=True)
 
+# ---- PAGE CONTENT ----
 st.title(':blue[Bike Sharing Demand Prediction]')
-st.subheader(':green[Enter accurate information to predict bike sharing demand]' )
+st.subheader(':green[Enter accurate information to predict bike sharing demand]')
+st.subheader(':red[Enter weather specific attribute]')
 
 
 st.subheader(':red[Enter weather specific attribute]') 
