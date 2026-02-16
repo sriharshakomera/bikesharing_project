@@ -77,7 +77,7 @@ st.markdown("""
         font-size: 28px;
         font-weight: 700;
         color: #0B3D91;
-        margin-top: 100px;
+        margin-top: 80px;
     }
     </style>
 """, unsafe_allow_html=True)
